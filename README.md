@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/BenjaminVega/spring-boot-crm.svg?branch=master)](https://travis-ci.org/BenjaminVega/spring-boot-crm)
+
 # spring-boot-crm
 
 ##Description
