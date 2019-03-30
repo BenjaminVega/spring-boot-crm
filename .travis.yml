@@ -1,6 +1,9 @@
 language: java
 sudo: false
 addons:
+  apt:
+    packages:
+    - docker-ce
   sonarcloud:
     organization: benjaminvega-github
     token:
