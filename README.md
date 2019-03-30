@@ -1,11 +1,12 @@
 [![Build Status](https://travis-ci.org/BenjaminVega/spring-boot-crm.svg?branch=master)](https://travis-ci.org/BenjaminVega/spring-boot-crm)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=BenjaminVega_spring-boot-crm&metric=alert_status)](https://sonarcloud.io/dashboard?id=BenjaminVega_spring-boot-crm)
 
 # spring-boot-crm
 
-##Description
+## Description
 This app is a CRM based on SpringBoot. The goal is to create a REST-API to manage customer data
 
-##Technical specs
+## Technical specs
 This app uses:
 
 - Database: PostgreSQL

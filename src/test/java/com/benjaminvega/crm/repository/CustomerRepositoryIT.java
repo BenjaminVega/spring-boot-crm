@@ -1,6 +1,7 @@
 package com.benjaminvega.crm.repository;
 
 import com.benjaminvega.crm.model.Customer;
+import org.assertj.core.api.AbstractBooleanAssert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 
 @RunWith(SpringRunner.class)
@@ -35,8 +37,11 @@ public class CustomerRepositoryIT {
 
         Optional<Customer> actualCustomer = cut.findById(customerId);
 
-        assertThat(actualCustomer.isPresent()).isTrue();
-        assertThat(actualCustomer.get()).isEqualTo(expectedCustomer);
+        if(actualCustomer.isPresent()) {
+            assertThat(actualCustomer.get()).isEqualTo(expectedCustomer);
+        } else {
+            fail("No customer retrieved from database");
+        }
 
     }
 
