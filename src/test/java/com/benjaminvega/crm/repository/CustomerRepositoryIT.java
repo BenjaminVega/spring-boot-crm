@@ -38,7 +38,11 @@ public class CustomerRepositoryIT {
         Optional<Customer> actualCustomer = cut.findById(customerId);
 
         if(actualCustomer.isPresent()) {
-            assertThat(actualCustomer.get()).isEqualTo(expectedCustomer);
+            assertThat(actualCustomer.get().getName()).isEqualTo(expectedCustomer.getName());
+            assertThat(actualCustomer.get().getSurname()).isEqualTo(expectedCustomer.getSurname());
+            assertThat(actualCustomer.get().getEditorId()).isEqualTo(expectedCustomer.getEditorId());
+            assertThat(actualCustomer.get().getPictureId()).isEqualTo(expectedCustomer.getPictureId());
+
         } else {
             fail("No customer retrieved from database");
         }
