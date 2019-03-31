@@ -1,7 +1,6 @@
 package com.benjaminvega.crm.repository;
 
 import com.benjaminvega.crm.model.Customer;
-import com.benjaminvega.crm.model.CustomerView;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
