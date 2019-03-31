@@ -11,6 +11,12 @@ This app uses:
 
 - Database: PostgreSQL
 
+## Building the app
+The project is configured in such a way that just by running "mvn clean install" it will run:
+- the building process
+- the UnitTests
+- The Integration Tests (bringing up the docker containers)
+- the Sonar analysis (Reliability, Security, Maintainability and Coverage)
 
 ## How to run the app
 Before running the spring app we need to startup the environment (database and other services). 

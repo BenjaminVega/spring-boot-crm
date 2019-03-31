@@ -9,11 +9,16 @@ import java.util.Optional;
 
 @Service
 public class CustomerService {
+
     @Autowired
     private CustomerRepository customerRepository;
 
     public Customer getCustomerByCustomerId(long customerId){
         Optional<Customer> customer =  customerRepository.findById(customerId);
         return customer.orElse(null);
+    }
+
+    public Customer createNewCustomer(Customer customer) {
+        return customerRepository.save(customer);
     }
 }

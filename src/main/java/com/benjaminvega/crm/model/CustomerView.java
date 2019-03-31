@@ -1,38 +1,22 @@
 package com.benjaminvega.crm.model;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.experimental.Tolerate;
 
-import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Getter
-@EqualsAndHashCode
 @Builder
-@Table(schema = "crm")
-@Entity
-public class Customer {
-
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private long id;
-
-    @Column
+public class CustomerView {
     @NotNull
     private String name;
-
-    @Column
     @NotNull
     private String surname;
-
-    @Column
     private long pictureId;
-
-    @Column
     @NotNull
     private long editorId;
 
     @Tolerate
-    public Customer() {}
-
+    public CustomerView() {}
 }
