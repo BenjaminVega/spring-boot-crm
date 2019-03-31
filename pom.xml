@@ -17,9 +17,9 @@
 	<properties>
 		<java.version>1.8</java.version>
         <sonar.exclusions>
-            **/*IT.*,
-            **/*E2E.*,
-            **/model/*.java
+            **/*IT.java,
+            **/*E2E.java,
+            **com/benjaminvega/crm/model/**/*.java
         </sonar.exclusions>
 	</properties>
 
