@@ -1,6 +1,5 @@
 [![Build Status](https://travis-ci.org/BenjaminVega/spring-boot-crm.svg?branch=master)](https://travis-ci.org/BenjaminVega/spring-boot-crm)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=BenjaminVega_spring-boot-crm&metric=alert_status)](https://sonarcloud.io/dashboard?id=BenjaminVega_spring-boot-crm)
-
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=com.benjaminvega%3Acrm&metric=alert_status)](https://sonarcloud.io/dashboard?id=com.benjaminvega%3Acrm)
 # spring-boot-crm
 
 ## Description
