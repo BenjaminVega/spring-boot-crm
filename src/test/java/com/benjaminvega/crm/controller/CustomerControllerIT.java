@@ -76,6 +76,5 @@ public class CustomerControllerIT {
 
         ResponseEntity<Customer> customerResponse = cut.getCustomerById(customerId);
         assertThat(customerResponse.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-
     }
 }
