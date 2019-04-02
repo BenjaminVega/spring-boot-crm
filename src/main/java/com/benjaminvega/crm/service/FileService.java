@@ -42,10 +42,12 @@ public class FileService {
     public File updatePicture(long fileId, long customerId) throws IOException {
         Optional<File> file = fileRepository.findById(fileId);
         if(file.isPresent()) {
+            fileSystemService.move(getAbsolutePathOfAPicture(file.get()),
+                    getUpdatedPathOfAPicture(file.get(), customerId),
+                    file.get().getName());
+
             file.get().setCustomerId(customerId);
             file.get().setPath(getUpdatedPathOfAPicture(file.get(), customerId));
-            fileSystemService.move(getAbsolutePathOfAPicture(file.get()),
-                    getUpdatedPathOfAPicture(file.get(), customerId));
             return fileRepository.save(file.get());
         } else {
           return null;
@@ -66,7 +68,7 @@ public class FileService {
     }
 
     private String getUpdatedPathOfAPicture(File file, long customerId) {
-        return file.getPath() + customerId + "/" +  file.getName();
+        return file.getPath() + customerId + "/";
     }
 
 }

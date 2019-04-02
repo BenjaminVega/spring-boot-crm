@@ -11,10 +11,12 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 
 @RestController
@@ -48,7 +50,7 @@ public class Controller {
         Customer customerResponse = customerService.createNewCustomer(
                 conversionService.convert(customer, Customer.class)
         );
-        if (customer != null ){
+        if (customerResponse != null ){
             if (customer.getPictureId() != 0L) {
                 fileService.updatePicture(customer.getPictureId(),customerResponse.getId());
             }

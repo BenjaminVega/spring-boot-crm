@@ -90,7 +90,7 @@ public class FileServiceTest {
     @Test(expected = IOException.class)
     public void tryToUpdateAFileButItIsNotInFileSystem() throws IOException {
         when(fileRepository.findById(any())).thenReturn(Optional.of(expectedFile));
-        doThrow(new IOException()).when(fileSystemService).move(any(), any());
+        doThrow(new IOException()).when(fileSystemService).move(any(), any(), any());
 
         cut.updatePicture(239L, 1873182L);
 
@@ -109,7 +109,7 @@ public class FileServiceTest {
         File updateFile = File.builder()
                 .id(expectedFile.getId())
                 .name(expectedFile.getName())
-                .path(expectedFile.getPath() + customerId + "/" + expectedFile.getName())
+                .path(expectedFile.getPath() + customerId + "/")
                 .build();
         ArgumentCaptor<File> argumentCaptor = ArgumentCaptor.forClass(File.class);
         when(fileRepository.findById(any())).thenReturn(Optional.of(expectedFile));

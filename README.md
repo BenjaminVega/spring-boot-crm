@@ -9,6 +9,7 @@ This app is a CRM based on SpringBoot. The goal is to create a REST-API to manag
 This app uses:
 
 - Database: PostgreSQL
+- Non-Relational DB: MongoDB
 
 ## Building the app
 The project is configured in such a way that just by running "mvn clean install" it will run:

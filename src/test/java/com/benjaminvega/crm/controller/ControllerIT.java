@@ -14,6 +14,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,13 +31,15 @@ import static org.assertj.core.api.Assertions.fail;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-@FixMethodOrder(MethodSorters.DEFAULT)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@TestPropertySource(properties = "crm.filesystem.basePath=/tmp/crm/")
 public class ControllerIT {
 
     @Autowired
     public Controller cut;
 
-    private long pictureId;
+    private static long pictureId;
+    private static long customerId;
 
     @Before
     public void setup() {
@@ -44,7 +47,7 @@ public class ControllerIT {
     }
 
     @Test
-    public void firstUploadCustomerPicture() throws URISyntaxException {
+    public void a_firstUploadCustomerPicture() throws URISyntaxException {
         MultipartFile profilePicture = getPictureFromResourceFolder();
         ResponseEntity<FileView> fileViewResponseEntity = cut.uploadNewPicture(profilePicture);
 
@@ -53,7 +56,7 @@ public class ControllerIT {
     }
 
     @Test
-    public void secondCreateNewCustomerSuccess() throws IOException {
+    public void b_secondCreateNewCustomerSuccess() throws IOException {
         CustomerView customerView = CustomerView.builder()
                 .name("Michael")
                 .surname("Jackson")
@@ -65,6 +68,7 @@ public class ControllerIT {
         assertThat(customerResponse.getStatusCode()).isEqualTo(HttpStatus.ACCEPTED);
 
         Customer actualCustomer = customerResponse.getBody();
+        this.customerId = actualCustomer.getId();
 
         assertThat(actualCustomer.getId()).isGreaterThan(0L);
         assertThat(actualCustomer.getName()).isEqualTo(customerView.getName());
@@ -74,16 +78,13 @@ public class ControllerIT {
     }
 
     @Test
-    public void thirdGetFirstCustomerAddedInDb() {
-        long customerId = 1L;
-
-        ResponseEntity<Customer> customerResponse = cut.getCustomerById(customerId);
+    public void c_thirdGetFirstCustomerAddedInDb() {
+        ResponseEntity<Customer> customerResponse = cut.getCustomerById(this.customerId);
         assertThat(customerResponse.getStatusCode()).isEqualTo(HttpStatus.ACCEPTED);
-
     }
 
     @Test
-    public void fourthGetPictureById() {
+    public void d_fourthGetPictureById() {
         ResponseEntity<Resource>  pictureResponse = cut.getPictureById(pictureId);
 
         assertThat(pictureResponse.getStatusCode()).isEqualTo(HttpStatus.ACCEPTED);

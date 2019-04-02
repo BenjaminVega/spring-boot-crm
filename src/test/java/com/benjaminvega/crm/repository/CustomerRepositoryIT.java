@@ -22,7 +22,6 @@ public class CustomerRepositoryIT {
 
     @Test
     public void addCustomerToDBAndReadItBack() {
-        long customerId = 1L;
 
         Customer expectedCustomer = Customer.builder()
                 .name("Michael")
@@ -31,9 +30,9 @@ public class CustomerRepositoryIT {
                 .pictureId(321L)
                 .build();
 
-        cut.save(expectedCustomer);
+        Customer customer = cut.save(expectedCustomer);
 
-        Optional<Customer> actualCustomer = cut.findById(customerId);
+        Optional<Customer> actualCustomer = cut.findById(customer.getId());
 
         if (actualCustomer.isPresent()) {
             assertThat(actualCustomer.get().getName()).isEqualTo(expectedCustomer.getName());
