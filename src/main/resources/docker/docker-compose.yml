@@ -12,3 +12,13 @@ services:
       POSTGRES_PASSWORD: benjaminvegadelpino
       POSTGRES_USER: benjaminvegadelpino
       POSTGRES_DB: crm
+
+  mongodb:
+    image: mongo:latest
+    container_name: "mongobd"
+    environment:
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+    ports:
+      - 27017:27017
+    command: mongod --smallfiles --logpath=/dev/null
