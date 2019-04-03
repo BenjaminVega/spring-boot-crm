@@ -23,7 +23,7 @@ import static org.junit.Assert.assertNotNull;
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class AdminControllerIT {
+public class AdminControllerITDisabled {
 
     @Autowired
     private AdminController cut;

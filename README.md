@@ -10,6 +10,10 @@ This app uses:
 
 - Database: PostgreSQL
 - Non-Relational DB: MongoDB
+- Identity Provider: Keycloak
+
+## Getting started
+If you want to know in details the functionality of the app, please check tis link [https://docs.google.com/document/d/1J9p6HpT4Q_B98eb-My40s9W3gIpRS2iLlgH_8AIWzXA/edit?usp=sharing]
 
 ## Building the app
 The project is configured in such a way that just by running "mvn clean install" it will run:

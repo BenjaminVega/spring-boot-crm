@@ -14,7 +14,7 @@ public class CustomerViewToCustomerConverter implements Converter<CustomerView, 
         return Customer.builder()
                 .name(customerView.getName())
                 .surname(customerView.getSurname())
-                .editorId(customerView.getEditorId())
+                .editorId(111L)
                 .pictureId(customerView.getPictureId())
                 .build();
     }

@@ -25,6 +25,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
@@ -40,6 +41,7 @@ public class ControllerIT {
 
     private static long pictureId;
     private static long customerId;
+    private static int numberOfCustomers;
 
     @Before
     public void setup() {
@@ -60,7 +62,6 @@ public class ControllerIT {
         CustomerView customerView = CustomerView.builder()
                 .name("Michael")
                 .surname("Jackson")
-                .editorId(123L)
                 .pictureId(pictureId)
                 .build();
 
@@ -68,18 +69,17 @@ public class ControllerIT {
         assertThat(customerResponse.getStatusCode()).isEqualTo(HttpStatus.ACCEPTED);
 
         Customer actualCustomer = customerResponse.getBody();
-        this.customerId = actualCustomer.getId();
+        customerId = actualCustomer.getId();
 
         assertThat(actualCustomer.getId()).isGreaterThan(0L);
         assertThat(actualCustomer.getName()).isEqualTo(customerView.getName());
         assertThat(actualCustomer.getSurname()).isEqualTo(customerView.getSurname());
-        assertThat(actualCustomer.getEditorId()).isEqualTo(customerView.getEditorId());
 
     }
 
     @Test
     public void c_thirdGetFirstCustomerAddedInDb() {
-        ResponseEntity<Customer> customerResponse = cut.getCustomerById(this.customerId);
+        ResponseEntity<Customer> customerResponse = cut.getCustomerById(customerId);
         assertThat(customerResponse.getStatusCode()).isEqualTo(HttpStatus.ACCEPTED);
     }
 
@@ -88,6 +88,41 @@ public class ControllerIT {
         ResponseEntity<Resource>  pictureResponse = cut.getPictureById(pictureId);
 
         assertThat(pictureResponse.getStatusCode()).isEqualTo(HttpStatus.ACCEPTED);
+    }
+
+    @Test
+    public void e_updateCustomerDetails() {
+        String newSurname = "Riot";
+        ResponseEntity<Customer> customerResponse = cut.getCustomerById(customerId);
+
+        CustomerView customerView = CustomerView.builder()
+                .name(customerResponse.getBody().getName())
+                .surname(newSurname)
+                .pictureId(customerResponse.getBody().getPictureId())
+                .build();
+
+        ResponseEntity<Customer> customerUpdateResponse = cut.updateCustomer(customerView,customerId);
+
+        assertThat(customerUpdateResponse.getStatusCode()).isEqualTo(HttpStatus.ACCEPTED);
+        assertThat(customerUpdateResponse.getBody().getSurname()).isEqualTo(newSurname);
+    }
+
+    @Test
+    public void f_listAllCustomers() {
+        ResponseEntity<List<Customer>> customers  = cut.listCustomers();
+        assertThat(customers.getStatusCode()).isEqualTo(HttpStatus.ACCEPTED);
+        numberOfCustomers = customers.getBody().size();
+    }
+
+    @Test
+    public void g_deleteCustomer() {
+        ResponseEntity<Void> response  = cut.deleteCustomer(customerId);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.ACCEPTED);
+
+        ResponseEntity<List<Customer>> customers  = cut.listCustomers();
+        int newNumberOfCustomers = customers.getBody().size();
+        assertThat(numberOfCustomers -1).isEqualTo(newNumberOfCustomers);
+        numberOfCustomers = newNumberOfCustomers;
     }
 
     @Test(expected = ConstraintViolationException.class)
@@ -106,6 +141,32 @@ public class ControllerIT {
         ResponseEntity<Customer> customerResponse = cut.getCustomerById(customerId);
         assertThat(customerResponse.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
+
+    @Test
+    public void createNewCustomerWithoutPicture() throws IOException {
+        CustomerView customerView = CustomerView.builder()
+                .name("Michael")
+                .surname("Jackson")
+                .build();
+
+        ResponseEntity<Customer> customerResponse = cut.postNewCustomer(customerView);
+        assertThat(customerResponse.getStatusCode()).isEqualTo(HttpStatus.ACCEPTED);
+
+        Customer actualCustomer = customerResponse.getBody();
+
+        assertThat(actualCustomer.getId()).isGreaterThan(0L);
+        assertThat(actualCustomer.getName()).isEqualTo(customerView.getName());
+        assertThat(actualCustomer.getSurname()).isEqualTo(customerView.getSurname());
+
+    }
+
+    @Test
+    public void errorUploadingCustomerPicture() {
+        ResponseEntity<FileView> fileViewResponseEntity = cut.uploadNewPicture(null);
+
+        assertThat(fileViewResponseEntity.getStatusCode()).isEqualTo(HttpStatus.EXPECTATION_FAILED);
+    }
+
 
     private MultipartFile getPictureFromResourceFolder() throws URISyntaxException {
         String name = "customerProfile.png";

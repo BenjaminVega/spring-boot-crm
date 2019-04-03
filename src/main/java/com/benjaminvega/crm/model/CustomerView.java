@@ -14,8 +14,6 @@ public class CustomerView {
     @NotNull
     private String surname;
     private long pictureId;
-    @NotNull
-    private long editorId;
 
     @Tolerate
     public CustomerView() {}

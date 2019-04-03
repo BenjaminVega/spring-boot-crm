@@ -6,7 +6,7 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.core.io.Resource;
 
-import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
 
@@ -19,14 +19,19 @@ public class FileSystemServiceTest {
     private FileSystemService cut;
 
     @Test(expected = RuntimeException.class)
-    public void getNonExistingFile() throws IOException {
+    public void getNonExistingFile() throws MalformedURLException {
         cut.getFile("/random/directory/andFile.jpg");
     }
 
     @Test
-    public void getExistingFile() throws IOException, URISyntaxException {
+    public void getExistingFile() throws URISyntaxException, MalformedURLException {
         String name = "customerProfile.png";
         Resource resource = cut.getFile(Paths.get(ClassLoader.getSystemResource(name).toURI()).toString());
         assertNotNull(resource);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void getNonExistingPath() throws  MalformedURLException {
+        cut.getFile("Hey There");
     }
 }

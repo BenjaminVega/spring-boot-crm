@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Getter
+@Setter
 @EqualsAndHashCode
 @Builder
 @Table(schema = "crm")

@@ -54,8 +54,11 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         super.configure(http);
         http.authorizeRequests()
-                .antMatchers("/customers/**").hasRole("user") // only user with role user are allowed to access
-                .anyRequest().permitAll();
+                .antMatchers("/customers/**").hasRole("user")
+                .antMatchers("/pictures/**").hasRole("user")
+                .anyRequest().permitAll()
+                .and()
+                .csrf().disable();
     }
 
     @Bean

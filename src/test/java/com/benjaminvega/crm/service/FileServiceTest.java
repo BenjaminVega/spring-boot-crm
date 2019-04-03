@@ -15,6 +15,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -65,6 +66,14 @@ public class FileServiceTest {
         assertEquals(expectedFile.getId(), argumentCaptor.getValue().getId());
         assertEquals(expectedFile.getName(), argumentCaptor.getValue().getName());
 
+    }
+
+    @Test(expected = Exception.class)
+    public void errorAddingPictureInTheSystem() throws Exception {
+        when(fileRepository.findFirstByOrderByIdDesc()).thenReturn(Optional.empty());
+        doThrow(new Exception()).when(fileSystemService).store(any(), any());
+
+        cut.addPicture(getPictureFromResourceFolder());
     }
 
     @Test
@@ -122,10 +131,10 @@ public class FileServiceTest {
         assertEquals(updateFile.getPath(), argumentCaptor.getValue().getPath());
     }
 
-    @Test(expected = IOException.class)
+    @Test(expected = MalformedURLException.class)
     public void getPictureThatIsMissingInTheFileSystem() throws IOException {
         when(fileRepository.findById(any())).thenReturn(Optional.of(expectedFile));
-        doThrow(new IOException()).when(fileSystemService).getFile(any());
+        doThrow(new MalformedURLException()).when(fileSystemService).getFile(any());
 
         cut.getPictureById(34234L);
     }

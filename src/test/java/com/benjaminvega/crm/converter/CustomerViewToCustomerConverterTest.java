@@ -35,19 +35,20 @@ public class CustomerViewToCustomerConverterTest {
         Customer expectedCustomer = Customer.builder()
                 .name(customerName)
                 .surname(customerSurname)
-                .editorId(customerEditorId)
                 .pictureId(customerPictureId)
                 .build();
         CustomerView customerView = CustomerView.builder()
                 .name(customerName)
                 .surname(customerSurname)
-                .editorId(customerEditorId)
                 .pictureId(customerPictureId)
                 .build();
 
         Customer actualCustomer = cut.convert(customerView);
 
-        assertThat(actualCustomer).isEqualTo(expectedCustomer);
+
+        assertThat(actualCustomer.getSurname()).isEqualTo(expectedCustomer.getSurname());
+        assertThat(actualCustomer.getName()).isEqualTo(expectedCustomer.getName());
+        assertThat(actualCustomer.getPictureId()).isEqualTo(expectedCustomer.getPictureId());
     }
 
 }

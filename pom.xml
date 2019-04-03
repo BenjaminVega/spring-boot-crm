@@ -17,6 +17,7 @@
 	<properties>
 		<java.version>1.8</java.version>
         <sonar.exclusions>
+            **/*Application.java,
             **/*IT.java,
             **/*E2E.java,
             **com/benjaminvega/crm/model/**/*.java
@@ -148,6 +149,7 @@
                         <image>
                             <external>
                                 <type>compose</type>
+                                <detached>true</detached>
                                 <basedir>src/main/resources/docker</basedir>
                                 <composeFile>${project.basedir}/src/main/resources/docker/docker-compose.yml</composeFile>
                             </external>
@@ -172,31 +174,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>com.github.slem1</groupId>
-                <artifactId>await-maven-plugin</artifactId>
-                <version>1.0</version>
-                <executions>
-                    <execution>
-                        <phase>process-test-classes</phase>
-                        <goals>
-                            <goal>Await</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <poll>
-                        <attempts>7</attempts>
-                        <sleep>15000</sleep>
-                    </poll>
-                    <httpConnections>
-                        <httpConnection>
-                            <url>http://localhost:8180/auth</url>
-                            <statusCode>200</statusCode>
-                        </httpConnection>
-                    </httpConnections>
-                </configuration>
-            </plugin>
+
 
             <!-- Integration Test -->
             <plugin>
@@ -221,6 +199,7 @@
                     <excludes>
                         <exclude>**/*IT.*</exclude>
                         <exclude>**/*E2E.*</exclude>
+                        <exclude>**/*Application.*</exclude>
                         <exclude>com/benjaminvega/crm/model/**/*</exclude>
                     </excludes>
                 </configuration>

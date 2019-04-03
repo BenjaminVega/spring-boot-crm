@@ -20,26 +20,16 @@ public class FileSystemService {
         Files.copy(file.getInputStream(), Paths.get(path).resolve(file.getOriginalFilename()), REPLACE_EXISTING);
     }
 
-    public void delete(String filename, String path) throws IOException {
-        Files.delete(Paths.get(path + "/" + filename));
-    }
-
     public void move(String sourceFile, String destinationPath, String filename) throws IOException {
         Files.createDirectories(Paths.get(destinationPath));
         Files.move(Paths.get(sourceFile), Paths.get(destinationPath + filename), REPLACE_EXISTING);
     }
 
-    public Resource getFile(String path) throws IOException {
-        Resource resource = null;
-        try {
-            resource = new UrlResource(Paths.get(path).toUri());
-            if (resource.exists() || resource.isReadable()) {
-            } else {
-                throw new RuntimeException("FAIL Because of resource!");
-            }
-            return resource;
-        } catch (MalformedURLException e) {
-            throw new RuntimeException("FAIL Because of path!");
+    public Resource getFile(String path) throws MalformedURLException {
+        Resource resource = new UrlResource(Paths.get(path).toUri());
+        if (!(resource.exists() || resource.isReadable())) {
+            throw new RuntimeException("FAIL Because of resource!");
         }
+        return resource;
     }
 }

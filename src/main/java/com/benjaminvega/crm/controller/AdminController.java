@@ -1,9 +1,7 @@
 package com.benjaminvega.crm.controller;
 
 import com.benjaminvega.crm.model.User;
-import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.keycloak.admin.client.Keycloak;
-import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.slf4j.Logger;
@@ -72,6 +70,20 @@ public class AdminController {
         return user.map(userRepresentation -> new ResponseEntity<>(userRepresentation, HttpStatus.ACCEPTED)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 
+    @PostMapping("/users/{userId}/roles/{role}")
+    public ResponseEntity<UserRepresentation> updateUser(@PathVariable("userId") String userId, @PathVariable("role") String role) {
+
+        List<UserRepresentation> users = keycloak.realm(realm).users().list();
+        Optional<UserRepresentation> user = users.stream().filter((UserRepresentation u) -> u.getId().compareTo(userId) == 0).findFirst();
+        if(user.isPresent()) {
+            user.get().setRealmRoles(Arrays.asList(role));
+            keycloak.realm(realm).users().create(user.get());
+           return new ResponseEntity<>(user.get(), HttpStatus.ACCEPTED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @DeleteMapping("/users/{userId}")
     public ResponseEntity<Void> deleteUser(@PathVariable("userId") String userId) {
 
@@ -80,5 +92,4 @@ public class AdminController {
 
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
-
 }

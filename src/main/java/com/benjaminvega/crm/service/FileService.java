@@ -31,7 +31,7 @@ public class FileService {
         File file = File.builder()
                 .id(id)
                 .path(fileSystemBasePath)
-                .name(picture.getName())
+                .name(picture.getOriginalFilename())
                 .build();
 
         fileSystemService.store(picture, fileSystemBasePath);
