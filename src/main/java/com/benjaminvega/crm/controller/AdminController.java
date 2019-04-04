@@ -50,12 +50,15 @@ public class AdminController {
         user.setRealmRoles(userRequest.getRoles());
 
         Response result = keycloak.realm(realm).users().create(user);
+
         if (result.getStatus() != 201) {
             logger.trace("The user: " + userRequest.getEmail() + " could not be created");
         }
+
         String userId = result.getLocation().getPath().replaceAll(".*/([^/]+)$", "$1");
         UserResource userResource = keycloak.realm(realm).users().get(userId);
         Optional<RoleRepresentation> testerRealmRole = keycloak.realm(realm).roles().list().stream().filter((RoleRepresentation r) -> r.getName().equalsIgnoreCase("user")).findFirst();
+
         if (testerRealmRole.isPresent()) {
             userResource.roles().realmLevel().add(Arrays.asList(testerRealmRole.get()));
             return new ResponseEntity<>(user,HttpStatus.ACCEPTED);
@@ -86,6 +89,7 @@ public class AdminController {
 
         Optional<RoleRepresentation> testerRealmRole = keycloak.realm(realm).roles().list().stream().filter((RoleRepresentation r) -> r.getName().equalsIgnoreCase(role)).findFirst();
         user.roles().realmLevel().remove(user.roles().realmLevel().listAll());
+
         if (testerRealmRole.isPresent()) {
             user.roles().realmLevel().add(Arrays.asList(testerRealmRole.get()));
             return new ResponseEntity<>(HttpStatus.ACCEPTED);

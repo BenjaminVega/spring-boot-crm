@@ -1,7 +1,6 @@
 language: java
 sudo: false
 install: true
-
 addons:
   apt:
     packages:
@@ -12,11 +11,13 @@ addons:
       secure: ZnY/Ixrmds06o4d7nwrDR55pCqluGIcPFwPabF2AdPw1MEOkkAXHSw0FMk3wHzrJSZr6iEyhMfINCpbeC3sJl6jy1xOSsgnol7VOGKogG9+Dsw3K319XF43hAH8LyyfMshIMVDjy2cKd74l7cY5CuP6KbtpxITnrC5YCLY933WN94hAdNmchUrwGp1ttOJHkQX9aBLU+yAjETUJQwgEgIWBKE6rbt8XlppWn0bkn/AzjCZYfG/zo16YIVWmvSREPdIJS6T0VdiQ/zte3Vo7wfbe1nJHM/+yd98X/mySrt+YdQ8j1M83Qb/TcgZi7mkyDnRkG9rICbZ3YjHDClw2O68y1ZcyzwDEUaIwbkZlhbpNrxT4i+UQvft7BQFlV8zCNS5bw2U2+KJgbqGaQtGS2t3AqE1wCoLGI/gSitxi+UCQKuVGa9dRHZqeHzIcVtWXpzMTqqibFNK6ZAIyHOyYdn11aZzamBxnDZQVclpqlm5jwPMS7PqXaLRkyPf/nHmZB36Y3x0gEzxU92A8ozR4KAHaHpnr6K2RsjcS1xnhbJwyPCH/IkGUDfDFK2mP6PogtH/AEkP02RZa2U4AJohzQ+vTKx/IFmHxm1yZ7t8g+OndrpMbGat72KBCJNZSPY48j28w1AgdfTqrgwFUat0phYr1Dyo4nqHZhO1HIReQawPI=
 script:
 - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
-
 jdk:
 - oraclejdk8
-
 cache:
   directories:
-  - '$HOME/.m2/repository'
-  - '$HOME/.sonar/cache'
+  - "$HOME/.m2/repository"
+  - "$HOME/.sonar/cache"
+deploy:
+  provider: heroku
+  api_key:
+    secure: pR8IKAfU9XEdLAknlbqRpVWNR5pVy+LcrU6hWG27aVBnC9JdFClteef5cBhu/gkOUJDSG/8Q2IM8AuoftUYJ6aUi6pZkmeO1OkAfTRdZ0vtE4O62pz99tGwVvtP4wq+cQLwRNT6HwAYRK6Xbu2IiXn8TYDnsmzXBLNsECjdz85RBDXaNYukQe2+ryOlxUTwg+1Tgj/iRe9YqglAGF+K+Uu+ORKN1y8DOAOHYhJlEtehHc2h5gkRZrLnXQr2t4pwBXspowy5433GgXBqh4ztXOFw+5EM+pKGbiDX2hGt4RQpVFhslsMDctugvi8MjB5tNx5ebAPhWJt/fa5l/OjxkIWxABRu9N5hCgg9miQosFAHhjgm0X+0LS/lF1AcdZp+xhtOXTazluKJFfU9aNwhM2iejZxfKcnJcnd7swF/JMhz21w3ECGyNBQ9nGpAZyrnMHVLqPw8+0vxqtfY+qDmppuEIgWazmOL5S8tUs+7X1Q+ikfbOWuJoSomVM8cjur+jQ8wSvVqw7I6s2/dmZcjYm+XPnWHd9Lwhcwht2uAb7PO2TfE67j9lfsZ/cZl4pK71AqvRGpRG0UQKejLQaXTQM7cuIMp2ZwhULZfXMPk+PqGtomTQC5xZs3K0iR5U0wsBKOCLgSBF1ExeeJmW1QKZqs9xXUirp8LnRB4OZ3Th0oM=
