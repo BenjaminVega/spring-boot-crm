@@ -19,7 +19,9 @@ If you want to know in details the functionality of the app, please check tis li
 The project is configured in such a way that just by running "mvn clean install" it will run:
 - the building process
 - the UnitTests
-- The Integration Tests (bringing up the docker containers)
+- the docker containers
+- the health check to continue when the containers are running
+- The Integration Tests 
 - the Sonar analysis (Reliability, Security, Maintainability and Coverage)
 
 ## How to run the app

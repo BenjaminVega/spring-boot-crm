@@ -2,7 +2,9 @@ package com.benjaminvega.crm.controller;
 
 import com.benjaminvega.crm.model.User;
 import org.keycloak.admin.client.Keycloak;
+import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
+import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +53,10 @@ public class AdminController {
         if (result.getStatus() != 201) {
             logger.trace("The user: " + userRequest.getEmail() + " could not be created");
         }
+        String userId = result.getLocation().getPath().replaceAll(".*/([^/]+)$", "$1");
+        UserResource userResource = keycloak.realm(realm).users().get(userId);
+        RoleRepresentation testerRealmRole = keycloak.realm(realm).roles().list().stream().filter((RoleRepresentation r) -> r.getName().equalsIgnoreCase("user")).findFirst().get();
+        userResource.roles().realmLevel().add(Arrays.asList(testerRealmRole));
 
         return new ResponseEntity<>(user, HttpStatus.ACCEPTED);
     }
@@ -73,15 +79,12 @@ public class AdminController {
     @PostMapping("/users/{userId}/roles/{role}")
     public ResponseEntity<UserRepresentation> updateUser(@PathVariable("userId") String userId, @PathVariable("role") String role) {
 
-        List<UserRepresentation> users = keycloak.realm(realm).users().list();
-        Optional<UserRepresentation> user = users.stream().filter((UserRepresentation u) -> u.getId().compareTo(userId) == 0).findFirst();
-        if(user.isPresent()) {
-            user.get().setRealmRoles(Arrays.asList(role));
-            keycloak.realm(realm).users().create(user.get());
-           return new ResponseEntity<>(user.get(), HttpStatus.ACCEPTED);
-        } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        UserResource user = keycloak.realm(realm).users().get(userId);
+
+        RoleRepresentation testerRealmRole = keycloak.realm(realm).roles().list().stream().filter((RoleRepresentation r) -> r.getName().equalsIgnoreCase(role)).findFirst().get();
+        user.roles().realmLevel().remove(user.roles().realmLevel().listAll());
+        user.roles().realmLevel().add(Arrays.asList(testerRealmRole));
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping("/users/{userId}")

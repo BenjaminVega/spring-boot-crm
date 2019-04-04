@@ -127,7 +127,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Picture\",\n\t\"surname\": \"User\",\n\t\"pictureId\": 40\n}"
+					"raw": "{\n\t\"name\": \"Jose\",\n\t\"surname\": \"User\",\n\t\"pictureId\": 64\n}"
 				},
 				"url": {
 					"raw": "localhost:8080/customers",
@@ -186,14 +186,14 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "localhost:8080/pictures/42",
+					"raw": "localhost:8080/pictures/64",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"pictures",
-						"42"
+						"64"
 					]
 				}
 			},
@@ -218,17 +218,17 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Old\",\n\t\"surname\": \"User\"\n}"
+					"raw": "{\n\t\"name\": \"Old\",\n\t\"surname\": \"User\",\n\t\"pictureId\": 55\n}"
 				},
 				"url": {
-					"raw": "localhost:8080/customers/3",
+					"raw": "localhost:8080/customers/1",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"customers",
-						"3"
+						"1"
 					]
 				}
 			},
@@ -250,14 +250,249 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "localhost:8080/customers/1",
+					"raw": "localhost:8080/customers/2",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"customers",
-						"1"
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login with ADMIN and Get Token Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ff77ce9f-de6b-4d3b-a5ad-7f8148ddf74a",
+						"exec": [
+							"var data = pm.response.json();",
+							"pm.environment.set(\"keycloak_token\", data.access_token)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_id",
+							"value": "admin-cli",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8180/auth/realms/master/protocol/openid-connect/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"auth",
+						"realms",
+						"master",
+						"protocol",
+						"openid-connect",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Current Users",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{keycloak_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8080/admin/users",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"admin",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create new User",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{keycloak_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"New User\",\n\t\"email\":\"super@email.com\",\n\t\"password\":\"password\",\n\t\"roles\": [\"user\"]\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/admin/users",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"admin",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Change role form user to admin",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{keycloak_token}}"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8080/admin/users/e41250be-3501-4cf8-aaa5-19cf0971f4ca/roles/admin",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"admin",
+						"users",
+						"e41250be-3501-4cf8-aaa5-19cf0971f4ca",
+						"roles",
+						"admin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{keycloak_token}}"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8080/admin/users/e41250be-3501-4cf8-aaa5-19cf0971f4ca",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"admin",
+						"users",
+						"e41250be-3501-4cf8-aaa5-19cf0971f4ca"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8180/auth/realms/master/protocol/openid-connect/token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8180/auth/realms/master/protocol/openid-connect/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"auth",
+						"realms",
+						"master",
+						"protocol",
+						"openid-connect",
+						"token"
 					]
 				}
 			},
