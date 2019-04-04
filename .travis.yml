@@ -17,7 +17,3 @@ cache:
   directories:
   - "$HOME/.m2/repository"
   - "$HOME/.sonar/cache"
-deploy:
-  provider: heroku
-  api_key:
-    secure: pR8IKAfU9XEdLAknlbqRpVWNR5pVy+LcrU6hWG27aVBnC9JdFClteef5cBhu/gkOUJDSG/8Q2IM8AuoftUYJ6aUi6pZkmeO1OkAfTRdZ0vtE4O62pz99tGwVvtP4wq+cQLwRNT6HwAYRK6Xbu2IiXn8TYDnsmzXBLNsECjdz85RBDXaNYukQe2+ryOlxUTwg+1Tgj/iRe9YqglAGF+K+Uu+ORKN1y8DOAOHYhJlEtehHc2h5gkRZrLnXQr2t4pwBXspowy5433GgXBqh4ztXOFw+5EM+pKGbiDX2hGt4RQpVFhslsMDctugvi8MjB5tNx5ebAPhWJt/fa5l/OjxkIWxABRu9N5hCgg9miQosFAHhjgm0X+0LS/lF1AcdZp+xhtOXTazluKJFfU9aNwhM2iejZxfKcnJcnd7swF/JMhz21w3ECGyNBQ9nGpAZyrnMHVLqPw8+0vxqtfY+qDmppuEIgWazmOL5S8tUs+7X1Q+ikfbOWuJoSomVM8cjur+jQ8wSvVqw7I6s2/dmZcjYm+XPnWHd9Lwhcwht2uAb7PO2TfE67j9lfsZ/cZl4pK71AqvRGpRG0UQKejLQaXTQM7cuIMp2ZwhULZfXMPk+PqGtomTQC5xZs3K0iR5U0wsBKOCLgSBF1ExeeJmW1QKZqs9xXUirp8LnRB4OZ3Th0oM=
