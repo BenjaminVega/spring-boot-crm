@@ -55,10 +55,13 @@ public class AdminController {
         }
         String userId = result.getLocation().getPath().replaceAll(".*/([^/]+)$", "$1");
         UserResource userResource = keycloak.realm(realm).users().get(userId);
-        RoleRepresentation testerRealmRole = keycloak.realm(realm).roles().list().stream().filter((RoleRepresentation r) -> r.getName().equalsIgnoreCase("user")).findFirst().get();
-        userResource.roles().realmLevel().add(Arrays.asList(testerRealmRole));
-
-        return new ResponseEntity<>(user, HttpStatus.ACCEPTED);
+        Optional<RoleRepresentation> testerRealmRole = keycloak.realm(realm).roles().list().stream().filter((RoleRepresentation r) -> r.getName().equalsIgnoreCase("user")).findFirst();
+        if (testerRealmRole.isPresent()) {
+            userResource.roles().realmLevel().add(Arrays.asList(testerRealmRole.get()));
+            return new ResponseEntity<>(user,HttpStatus.ACCEPTED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
+        }
     }
 
     @GetMapping("/users")
@@ -81,10 +84,14 @@ public class AdminController {
 
         UserResource user = keycloak.realm(realm).users().get(userId);
 
-        RoleRepresentation testerRealmRole = keycloak.realm(realm).roles().list().stream().filter((RoleRepresentation r) -> r.getName().equalsIgnoreCase(role)).findFirst().get();
+        Optional<RoleRepresentation> testerRealmRole = keycloak.realm(realm).roles().list().stream().filter((RoleRepresentation r) -> r.getName().equalsIgnoreCase(role)).findFirst();
         user.roles().realmLevel().remove(user.roles().realmLevel().listAll());
-        user.roles().realmLevel().add(Arrays.asList(testerRealmRole));
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        if (testerRealmRole.isPresent()) {
+            user.roles().realmLevel().add(Arrays.asList(testerRealmRole.get()));
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
+        }
     }
 
     @DeleteMapping("/users/{userId}")
