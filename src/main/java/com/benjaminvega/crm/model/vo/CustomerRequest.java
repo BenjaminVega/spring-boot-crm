@@ -1,4 +1,4 @@
-package com.benjaminvega.crm.model;
+package com.benjaminvega.crm.model.vo;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Builder
-public class CustomerView {
+public class CustomerRequest {
     @NotNull
     private String name;
     @NotNull
@@ -16,5 +16,5 @@ public class CustomerView {
     private long pictureId;
 
     @Tolerate
-    public CustomerView() {}
+    public CustomerRequest() {}
 }

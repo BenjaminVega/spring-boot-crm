@@ -37,6 +37,7 @@ public class CustomerService {
             optionalCustomer.get().setName(customer.getName());
             optionalCustomer.get().setSurname(customer.getSurname());
             optionalCustomer.get().setPictureId(customer.getPictureId());
+            optionalCustomer.get().setEditorId(customer.getEditorId());
             return customerRepository.save(optionalCustomer.get());
         }
         return  null;

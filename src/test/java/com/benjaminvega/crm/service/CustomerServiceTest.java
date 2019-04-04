@@ -1,7 +1,6 @@
 package com.benjaminvega.crm.service;
 
 import com.benjaminvega.crm.model.Customer;
-import com.benjaminvega.crm.model.File;
 import com.benjaminvega.crm.repository.CustomerRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,6 +12,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
@@ -37,7 +37,7 @@ public class CustomerServiceTest {
                 .id(customerId)
                 .name("Michael")
                 .surname("Jackson")
-                .editorId(1L)
+                .editorId(UUID.randomUUID())
                 .pictureId(1L)
                 .build();
 
@@ -67,7 +67,7 @@ public class CustomerServiceTest {
                 .id(234L)
                 .name("Michael")
                 .surname("Jackson")
-                .editorId(1L)
+                .editorId(UUID.randomUUID())
                 .pictureId(1L)
                 .build();
         when(customerRepository.findAll()).thenReturn(Arrays.asList(expectedCustomer));
@@ -84,12 +84,12 @@ public class CustomerServiceTest {
     @Test
     public void updateCustomer() {
         ArgumentCaptor<Customer> argumentCaptor = ArgumentCaptor.forClass(Customer.class);
-
+        UUID editorId = UUID.randomUUID();
         Customer customer = Customer.builder()
                 .id(234L)
                 .name("Michael")
                 .surname("Jackson")
-                .editorId(1L)
+                .editorId(editorId)
                 .pictureId(1L)
                 .build();
 
@@ -97,7 +97,7 @@ public class CustomerServiceTest {
                 .id(234L)
                 .name("Jake")
                 .surname("Jackson")
-                .editorId(1L)
+                .editorId(editorId)
                 .pictureId(1L)
                 .build();
         when(customerRepository.findById(234L)).thenReturn(Optional.of(customer));

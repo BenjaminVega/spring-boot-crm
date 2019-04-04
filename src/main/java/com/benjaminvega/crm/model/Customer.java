@@ -5,6 +5,7 @@ import lombok.experimental.Tolerate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -31,7 +32,7 @@ public class Customer {
 
     @Column
     @NotNull
-    private long editorId;
+    private UUID editorId;
 
     @Tolerate
     public Customer() {}

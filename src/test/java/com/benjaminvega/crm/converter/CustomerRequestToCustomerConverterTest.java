@@ -1,8 +1,8 @@
 package com.benjaminvega.crm.converter;
 
-import com.benjaminvega.crm.converters.CustomerViewToCustomerConverter;
+import com.benjaminvega.crm.converters.CustomerRequestToCustomerConverter;
 import com.benjaminvega.crm.model.Customer;
-import com.benjaminvega.crm.model.CustomerView;
+import com.benjaminvega.crm.model.vo.CustomerRequest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,10 +12,10 @@ import org.mockito.junit.MockitoJUnitRunner;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CustomerViewToCustomerConverterTest {
+public class CustomerRequestToCustomerConverterTest {
 
     @InjectMocks
-    private CustomerViewToCustomerConverter cut;
+    private CustomerRequestToCustomerConverter cut;
 
     private String customerName;
     private String customerSurname;
@@ -37,13 +37,13 @@ public class CustomerViewToCustomerConverterTest {
                 .surname(customerSurname)
                 .pictureId(customerPictureId)
                 .build();
-        CustomerView customerView = CustomerView.builder()
+        CustomerRequest customerRequest = CustomerRequest.builder()
                 .name(customerName)
                 .surname(customerSurname)
                 .pictureId(customerPictureId)
                 .build();
 
-        Customer actualCustomer = cut.convert(customerView);
+        Customer actualCustomer = cut.convert(customerRequest);
 
 
         assertThat(actualCustomer.getSurname()).isEqualTo(expectedCustomer.getSurname());

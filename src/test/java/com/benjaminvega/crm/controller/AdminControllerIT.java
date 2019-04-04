@@ -23,7 +23,7 @@ import static org.junit.Assert.assertNotNull;
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class AdminControllerITDisabled {
+public class AdminControllerIT {
 
     @Autowired
     private AdminController cut;
@@ -80,7 +80,19 @@ public class AdminControllerITDisabled {
     }
 
     @Test
-    public void d_deleteUser() {
+    public void d_changeRoleToAdmin() {
+        ResponseEntity<UserRepresentation> userRepresentationResponseEntity = cut.updateUser(userRepresentation.getId(),"admin");
+
+        assertThat(userRepresentationResponseEntity.getStatusCode()).isEqualTo(HttpStatus.ACCEPTED);
+
+        UserRepresentation userResource = userRepresentationResponseEntity.getBody();
+        assertThat(userResource.getUsername()).isEqualTo(user.getUsername().toLowerCase());
+        assertThat(userResource.getFirstName()).isEqualTo(user.getFirstName());
+        assertThat(userResource.getEmail()).isEqualTo(user.getEmail().toLowerCase());
+    }
+
+    @Test
+    public void f_deleteUser() {
         ResponseEntity<Void> responseEntity = cut.deleteUser(userRepresentation.getId());
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.ACCEPTED);

@@ -6,5 +6,5 @@ CREATE TABLE crm."customer" (
     name VARCHAR (50) NOT NULL,
     surname VARCHAR (100) NOT NULL,
     picture_id integer,
-    editor_id integer NOT NULL
+    editor_id uuid NOT NULL
 );

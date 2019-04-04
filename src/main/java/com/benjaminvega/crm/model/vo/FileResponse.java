@@ -1,10 +1,10 @@
-package com.benjaminvega.crm.model;
+package com.benjaminvega.crm.model.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class FileView {
+public class FileResponse {
     private long id;
 }

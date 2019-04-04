@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
@@ -26,7 +27,7 @@ public class CustomerRepositoryIT {
         Customer expectedCustomer = Customer.builder()
                 .name("Michael")
                 .surname("Jackson")
-                .editorId(123L)
+                .editorId(UUID.randomUUID())
                 .pictureId(321L)
                 .build();
 

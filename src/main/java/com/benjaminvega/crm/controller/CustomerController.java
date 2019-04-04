@@ -1,11 +1,13 @@
 package com.benjaminvega.crm.controller;
 
 import com.benjaminvega.crm.model.Customer;
-import com.benjaminvega.crm.model.CustomerView;
 import com.benjaminvega.crm.model.File;
-import com.benjaminvega.crm.model.FileView;
+import com.benjaminvega.crm.model.vo.CustomerRequest;
+import com.benjaminvega.crm.model.vo.CustomerResponse;
+import com.benjaminvega.crm.model.vo.FileResponse;
 import com.benjaminvega.crm.service.CustomerService;
 import com.benjaminvega.crm.service.FileService;
+import org.keycloak.adapters.springsecurity.account.SimpleKeycloakAccount;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,16 +15,20 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping
-public class Controller {
+public class CustomerController {
 
     @Autowired
     private CustomerService customerService;
@@ -33,34 +39,40 @@ public class Controller {
     @Autowired
     private ConversionService conversionService;
 
-    private Logger logger = LoggerFactory.getLogger(AdminController.class);
+    private Logger logger = LoggerFactory.getLogger(CustomerController.class);
 
 
     @PostMapping("/customers")
-    public ResponseEntity<Customer> postNewCustomer(@RequestBody @Valid CustomerView customer) throws IOException {
+    public ResponseEntity<CustomerResponse> postNewCustomer(@RequestBody @Valid CustomerRequest customerRequest, @NotNull Authentication auth) throws IOException {
         HttpStatus status = HttpStatus.BAD_REQUEST;
-        Customer customerResponse = customerService.createNewCustomer(
-                conversionService.convert(customer, Customer.class)
-        );
-        if (customerResponse != null) {
+        UUID editorId = UUID.fromString(((SimpleKeycloakAccount) auth.getDetails()).getKeycloakSecurityContext().getToken().getSubject());
+
+        Customer customerToPersist = conversionService.convert(customerRequest, Customer.class);
+        customerToPersist.setEditorId(editorId);
+
+        Customer customer = customerService.createNewCustomer(customerToPersist);
+
+        if (customer != null) {
             if (customer.getPictureId() != 0L) {
-                fileService.updatePicture(customer.getPictureId(), customerResponse.getId());
+                fileService.updatePicture(customer.getPictureId(), customer.getId());
             }
             status = HttpStatus.ACCEPTED;
         }
 
-        return ResponseEntity.status(status).body(customerResponse);
+        return ResponseEntity.status(status).body(conversionService.convert(customer, CustomerResponse.class));
     }
 
     @GetMapping("/customers")
-    public ResponseEntity<List<Customer>> listCustomers() {
-        List<Customer> customersResponse = customerService.getAllCustomers();
+    public ResponseEntity<List<CustomerResponse>> listCustomers() {
+        List<Customer> customers = customerService.getAllCustomers();
+        List<CustomerResponse> customersResponse = new ArrayList<>();
+        customers.forEach(u -> customersResponse.add(conversionService.convert(u, CustomerResponse.class)));
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(customersResponse);
     }
 
     @GetMapping("/customers/{customerId}")
-    public ResponseEntity<Customer> getCustomerById(@PathVariable("customerId") long customerId) {
+    public ResponseEntity<CustomerResponse> getCustomerById(@PathVariable("customerId") long customerId) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
         Customer customer = customerService.getCustomerByCustomerId(customerId);
 
@@ -68,7 +80,7 @@ public class Controller {
             status = HttpStatus.ACCEPTED;
         }
 
-        return ResponseEntity.status(status).body(customer);
+        return ResponseEntity.status(status).body(conversionService.convert(customer, CustomerResponse.class));
     }
 
     @DeleteMapping("/customers/{customerId}")
@@ -78,17 +90,21 @@ public class Controller {
     }
 
     @PatchMapping("/customers/{customerId}")
-    public ResponseEntity<Customer> updateCustomer(@RequestBody @Valid CustomerView customerView, @PathVariable("customerId") long customerId) {
-        Customer customer = conversionService.convert(customerView, Customer.class);
+    public ResponseEntity<CustomerResponse> updateCustomer(@RequestBody @Valid CustomerRequest customerRequest, @PathVariable("customerId") long customerId, @NotNull Authentication auth) {
+        UUID editorId = UUID.fromString(((SimpleKeycloakAccount) auth.getDetails()).getKeycloakSecurityContext().getToken().getSubject());
+
+        Customer customer = conversionService.convert(customerRequest, Customer.class);
+        customer.setEditorId(editorId);
+
         Customer customerUpdated = customerService.updateCustomer(customer, customerId);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(customerUpdated);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(conversionService.convert(customerUpdated, CustomerResponse.class));
     }
 
     @PostMapping("/pictures")
-    public ResponseEntity<FileView> uploadNewPicture(@RequestParam("file") MultipartFile picture) {
+    public ResponseEntity<FileResponse> uploadNewPicture(@RequestParam("file") MultipartFile picture) {
         try {
             File file = fileService.addPicture(picture);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(new FileView(file.getId()));
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(new FileResponse(file.getId()));
         } catch (Exception e) {
             logger.trace(e.getMessage());
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(null);

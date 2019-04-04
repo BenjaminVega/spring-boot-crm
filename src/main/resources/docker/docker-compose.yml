@@ -1,4 +1,4 @@
-version: '2'
+version: '2.1'
 
 volumes:
   postgres_data:
@@ -47,7 +47,12 @@ services:
       DB_PASSWORD: password
       KEYCLOAK_USER: admin
       KEYCLOAK_PASSWORD: admin
+    command:
+      - "-Dkeycloak.migration.action=import -Dkeycloak.migration.provider=singleFile -Dkeycloak.migration.file=/opt/jboss/keycloak/realm-users.json -Dkeycloak.migration.strategy=OVERWRITE_EXISTING"
     ports:
       - 8180:8080
+    volumes:
+      - ./realm-users.json:/opt/jboss/keycloak/realm-users.json
     depends_on:
       - postgres_keycloak
+

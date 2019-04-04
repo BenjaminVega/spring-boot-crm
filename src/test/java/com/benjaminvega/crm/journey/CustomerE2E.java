@@ -6,6 +6,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -22,7 +24,7 @@ public class CustomerE2E {
         Customer newCustomer = Customer.builder()
                 .name("Tom")
                 .surname("Jones")
-                .editorId(1L)
+                .editorId(UUID.randomUUID())
                 .build();
 
         Customer actualCustomer =

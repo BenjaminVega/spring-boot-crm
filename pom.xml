@@ -47,6 +47,17 @@
         </dependency>
 
         <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>2.8.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>2.8.0</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-admin-client</artifactId>
             <version>4.8.3.Final</version>
@@ -141,40 +152,56 @@
 
             <!-- Start Docker Containers -->
             <plugin>
-                <groupId>io.fabric8</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <version>0.20.1</version>
+                <!-- Used to spin up an integration testing environment -->
+                <groupId>com.dkanejs.maven.plugins</groupId>
+                <artifactId>docker-compose-maven-plugin</artifactId>
+                <version>1.0.1</version>
                 <configuration>
-                    <images>
-                        <image>
-                            <external>
-                                <type>compose</type>
-                                <detached>true</detached>
-                                <basedir>src/main/resources/docker</basedir>
-                                <composeFile>${project.basedir}/src/main/resources/docker/docker-compose.yml</composeFile>
-                            </external>
-                        </image>
-                    </images>
+                    <composeFile>${project.basedir}/src/main/resources/docker/docker-compose.yml</composeFile>
+                    <detachedMode>true</detachedMode>
                 </configuration>
                 <executions>
                     <execution>
-                        <id>prepare-it-database</id>
+                        <id>docker-compose-up</id>
                         <phase>generate-test-sources</phase>
                         <goals>
-                            <goal>build</goal>
-                            <goal>start</goal>
+                            <goal>up</goal>
                         </goals>
                     </execution>
                     <execution>
-                        <id>remove-it-database</id>
+                        <id>docker-compose-down</id>
                         <phase>post-integration-test</phase>
                         <goals>
-                            <goal>stop</goal>
+                            <goal>down</goal>
                         </goals>
                     </execution>
                 </executions>
             </plugin>
-
+            <plugin>
+                <groupId>com.github.slem1</groupId>
+                <artifactId>await-maven-plugin</artifactId>
+                <version>1.0</version>
+                <executions>
+                    <execution>
+                        <phase>process-test-classes</phase>
+                        <goals>
+                            <goal>Await</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <poll>
+                        <attempts>5</attempts>
+                        <sleep>15000</sleep>
+                    </poll>
+                    <httpConnections>
+                        <httpConnection>
+                            <url>http://localhost:8180/auth</url>
+                            <statusCode>200</statusCode>
+                        </httpConnection>
+                    </httpConnections>
+                </configuration>
+            </plugin>
 
             <!-- Integration Test -->
             <plugin>
