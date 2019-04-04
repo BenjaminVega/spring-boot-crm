@@ -9,10 +9,13 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Builder
 public class CustomerRequest {
+
     @NotNull
     private String name;
+
     @NotNull
     private String surname;
+
     private long pictureId;
 
     @Tolerate

@@ -19,14 +19,12 @@ public class CustomerRequestToCustomerConverterTest {
 
     private String customerName;
     private String customerSurname;
-    private long customerEditorId;
     private long customerPictureId;
 
     @Before
     public void setUp() {
         customerName = "Bruce";
         customerSurname = "Wane";
-        customerEditorId = 124L;
         customerPictureId = 9823L;
     }
 

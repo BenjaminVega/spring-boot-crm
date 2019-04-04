@@ -11,8 +11,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class File {
     @Id
     private long id;
+
     private String name;
+
     private String path;
+
     private long customerId;
 
     public void setCustomerId(long customerId) {

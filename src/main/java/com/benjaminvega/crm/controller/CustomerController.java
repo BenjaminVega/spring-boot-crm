@@ -41,7 +41,6 @@ public class CustomerController {
 
     private Logger logger = LoggerFactory.getLogger(CustomerController.class);
 
-
     @PostMapping("/customers")
     public ResponseEntity<CustomerResponse> postNewCustomer(@RequestBody @Valid CustomerRequest customerRequest, @NotNull Authentication auth) throws IOException {
         HttpStatus status = HttpStatus.BAD_REQUEST;

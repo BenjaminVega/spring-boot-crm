@@ -77,7 +77,7 @@ public class AdminController {
     }
 
     @PostMapping("/users/{userId}/roles/{role}")
-    public ResponseEntity<UserRepresentation> updateUser(@PathVariable("userId") String userId, @PathVariable("role") String role) {
+    public ResponseEntity<Void> updateUser(@PathVariable("userId") String userId, @PathVariable("role") String role) {
 
         UserResource user = keycloak.realm(realm).users().get(userId);
 

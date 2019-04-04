@@ -6,6 +6,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
+import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -81,14 +82,9 @@ public class AdminControllerIT {
 
     @Test
     public void d_changeRoleToAdmin() {
-        ResponseEntity<UserRepresentation> userRepresentationResponseEntity = cut.updateUser(userRepresentation.getId(),"admin");
+        ResponseEntity<Void> userRepresentationResponseEntity = cut.updateUser(userRepresentation.getId(),"admin");
 
         assertThat(userRepresentationResponseEntity.getStatusCode()).isEqualTo(HttpStatus.ACCEPTED);
-
-        UserRepresentation userResource = userRepresentationResponseEntity.getBody();
-        assertThat(userResource.getUsername()).isEqualTo(user.getUsername().toLowerCase());
-        assertThat(userResource.getFirstName()).isEqualTo(user.getFirstName());
-        assertThat(userResource.getEmail()).isEqualTo(user.getEmail().toLowerCase());
     }
 
     @Test
